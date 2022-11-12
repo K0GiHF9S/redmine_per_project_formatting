@@ -1,9 +1,9 @@
-require 'redmine'
-require 'redmine_per_project_formatting'
-
-Rails.application.config.to_prepare do
+prepare = lambda do
   RedminePerProjectFormatting.apply_patch
 end
+
+prepare.call if Redmine.const_defined?(:PluginLoader)
+Rails.application.config.to_prepare(&prepare)
 
 Redmine::Plugin.register :redmine_per_project_formatting do
   name 'Redmine per project formatting plugin'
